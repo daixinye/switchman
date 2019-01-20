@@ -64,7 +64,7 @@ const server = http.createServer((req, res) => {
       configParsedUrl.hostname == options.hostname &&
       configParsedUrl.port == options.port &&
       options.path.indexOf(configParsedUrl.path) == 0;
-    if (matchReferer || matchUrl) {
+    if (options.hostname === configParsedUrl.hostname && (matchReferer || matchUrl)) {
       UTIL.overlap(options, config[configUrl]);
       break;
     }
