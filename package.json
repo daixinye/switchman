@@ -1,0 +1,30 @@
+{
+  "name": "switchman",
+  "version": "0.0.0",
+  "description": "",
+  "main": "dist/main.js",
+  "scripts": {
+    "build": "webpack",
+    "start": "webpack && node ./dist/main.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/daixinye/switchman.git"
+  },
+  "author": "daixinye",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/daixinye/switchman/issues"
+  },
+  "homepage": "https://github.com/daixinye/switchman#readme",
+  "dependencies": {
+    "@types/node": "^10.12.18",
+    "clean-webpack-plugin": "^1.0.0",
+    "js-yaml": "^3.12.1",
+    "ts-loader": "^5.3.3",
+    "typescript": "^3.2.4",
+    "typings": "^2.1.1",
+    "webpack": "^4.28.4",
+    "webpack-cli": "^3.2.1"
+  }
+}
