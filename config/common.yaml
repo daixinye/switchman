@@ -1,0 +1,6 @@
+example.daixinye.com:
+    hostname: 127.0.0.1
+    port: 8000
+
+example.daixinye.com/online:
+    hostname: example.daixinye.com
