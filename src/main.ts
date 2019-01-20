@@ -44,7 +44,7 @@ const server = http.createServer((req, res) => {
   let refererParsedUrl = {
     hostname,
     port: port || 80,
-    path: path || "",
+    path: path || ""
   };
 
   // 检查 config
@@ -56,11 +56,15 @@ const server = http.createServer((req, res) => {
       path: path || ""
     };
 
-    let match: Boolean =
+    let matchReferer: Boolean =
       configParsedUrl.hostname == refererParsedUrl.hostname &&
       configParsedUrl.port == refererParsedUrl.port &&
       refererParsedUrl.path.indexOf(configParsedUrl.path) == 0;
-    if (match) {
+    let matchUrl: Boolean =
+      configParsedUrl.hostname == options.hostname &&
+      configParsedUrl.port == options.port &&
+      options.path.indexOf(configParsedUrl.path) == 0;
+    if (matchReferer || matchUrl) {
       UTIL.overlap(options, config[configUrl]);
       break;
     }
@@ -75,8 +79,7 @@ const server = http.createServer((req, res) => {
   req.pipe(proxyClient);
 });
 
-server.on("connect", (req, socket, header) => {
-});
+server.on("connect", (req, socket, header) => {});
 
 server.on("listening", () => {
   console.log("switchman started on", PROXY_CONFIG.PORT);
