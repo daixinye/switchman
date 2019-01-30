@@ -18,12 +18,24 @@ namespace PROXY_CONFIG {
   export const ENCODING = "utf-8";
   export const PORT = 9000;
   export const CONFIG_PATH = "./config/common.yaml";
+
+  export function readConfig() {
+    return yaml.safeLoad(
+      fs.readFileSync(PROXY_CONFIG.CONFIG_PATH, {
+        encoding: PROXY_CONFIG.ENCODING
+      })
+    );
+  }
 }
 
-const config = yaml.safeLoad(
-  fs.readFileSync(PROXY_CONFIG.CONFIG_PATH, {
-    encoding: PROXY_CONFIG.ENCODING
-  })
+let config = PROXY_CONFIG.readConfig();
+// 配置文件修改时立即更新
+fs.watchFile(
+  PROXY_CONFIG.CONFIG_PATH,
+  { persistent: true, interval: 500 },
+  () => {
+    config = PROXY_CONFIG.readConfig();
+  }
 );
 
 const server = http.createServer((req, res) => {
@@ -64,7 +76,10 @@ const server = http.createServer((req, res) => {
       configParsedUrl.hostname == options.hostname &&
       configParsedUrl.port == options.port &&
       options.path.indexOf(configParsedUrl.path) == 0;
-    if (options.hostname === configParsedUrl.hostname && (matchReferer || matchUrl)) {
+    if (
+      options.hostname === configParsedUrl.hostname &&
+      (matchReferer || matchUrl)
+    ) {
       UTIL.overlap(options, config[configUrl]);
       break;
     }
@@ -74,7 +89,7 @@ const server = http.createServer((req, res) => {
     proxyRes.pipe(res);
   });
   proxyClient.on("error", e => {
-    console.log("proxyClient", "error", e);
+    res.end(JSON.stringify({ switchman: e }));
   });
   req.pipe(proxyClient);
 });
